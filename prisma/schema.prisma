@@ -1,0 +1,188 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("student") // 'student' | 'admin'
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  verificationCode String?
+  verificationCodeExpires DateTime?
+  emailVerified DateTime?
+
+  profile   StudentProfile?
+  enrollments Enrollment[]
+  bills     Bill[]
+  scheduleEnrollments ScheduleEnrollment[]
+  messages  ChatMessage[]
+  notifications Notification[]
+}
+
+model StudentProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  address     String?
+  dateOfBirth DateTime?
+  instrument  String?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+
+  registrationFee Int @default(200000)
+  monthlyFee  Int @default(350000)
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Setiap kursus hanya memiliki 1 mentor
+  mentorId    String?
+  mentor      Mentor?  @relation(fields: [mentorId], references: [id], onDelete: SetNull)
+
+  enrollments Enrollment[]
+  bills       Bill[]
+  courseSchedules CourseSchedule[]
+  practiceContents PracticeContent[]
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  userId    String
+  courseId  String
+  status    String   @default("pending_payment") // 'pending_payment' | 'active' | 'completed' | 'cancelled'
+  enrolledAt DateTime @default(now())
+
+  // Tracking sesi: 24 pertemuan per kursus
+  totalSessions     Int @default(24)
+  completedSessions Int @default(0)
+
+  // Link ke jadwal yang dipilih
+  scheduleId String?
+
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model Bill {
+  id          String   @id @default(uuid())
+  userId      String
+  courseId    String?
+  type        String   @default("monthly") // 'registration' | 'monthly'
+  amount      Int
+  lateFee     Int      @default(0) // Denda keterlambatan (Rp 5.000)
+  month       String
+  dueDate     DateTime
+  status      String   @default("unpaid") // 'paid' | 'unpaid' | 'overdue'
+  paymentDate DateTime?
+  createdAt   DateTime @default(now())
+
+  // Midtrans fields
+  snapToken           String?
+  midtransOrderId     String?   @unique
+  midtransTransactionId String?
+  paymentMethod       String?   // gopay, bank_transfer, credit_card, etc.
+
+  user        User     @relation(fields: [userId], references: [id])
+  course      Course?  @relation(fields: [courseId], references: [id])
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  userId    String
+  sender    String   // 'user' | 'admin' | 'system'
+  text      String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String   @db.Text
+  type      String   // 'info' | 'success' | 'warning' | 'error'
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model PracticeContent {
+  id           String   @id @default(uuid())
+  title        String
+  thumbnailUrl String
+  videoUrl     String
+  duration     String?  @default("00:00") // Durasi video, misal "10:05"
+  courseId      String
+  course        Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+}
+
+// ===== MODELS FOR MENTOR & SCHEDULE SYSTEM =====
+
+model Mentor {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  phone       String?
+  expertise   String   // Keahlian (Piano, Gitar, Vokal, dll)
+  photo       String?
+  bio         String?  @db.Text
+  status      String   @default("active") // active, inactive
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  courses     Course[]
+  courseSchedules CourseSchedule[]
+}
+
+model CourseSchedule {
+  id              String   @id @default(uuid())
+  courseId        String
+  mentorId        String
+  day             String   // Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, Minggu
+  startTime       String   // Format: "11:00"
+  endTime         String   // Format: "11:45"
+  room            String   // Nama ruangan
+  maxStudents     Int      @default(1) // Private lesson: 1 siswa per slot
+  status          String   @default("active") // active, cancelled, completed
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  course          Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  mentor          Mentor   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  enrollments     ScheduleEnrollment[]
+}
+
+model ScheduleEnrollment {
+  id          String   @id @default(uuid())
+  scheduleId  String
+  userId      String
+  status      String   @default("enrolled") // enrolled, completed, cancelled
+  enrolledAt  DateTime @default(now())
+
+  schedule    CourseSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([scheduleId, userId])
+}
