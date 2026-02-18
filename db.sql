@@ -19,6 +19,57 @@
 CREATE DATABASE IF NOT EXISTS `db_kursus_musik` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `db_kursus_musik`;
 
+
+-- Dumping structure for table db_kursus_musik.mentor
+CREATE TABLE IF NOT EXISTS `mentor` (
+  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `expertise` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `photo` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bio` text COLLATE utf8mb4_unicode_ci,
+  `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `createdAt` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` datetime(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Mentor_email_key` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table db_kursus_musik.mentor: ~5 rows (approximately)
+INSERT INTO `mentor` (`id`, `name`, `email`, `phone`, `expertise`, `photo`, `bio`, `status`, `createdAt`, `updatedAt`) VALUES
+	('mentor-drum', 'Mr. Beat', 'mentor.drum@musicsphere.com', '081234567804', 'Drum', NULL, 'Drummer profesional dengan pengalaman di berbagai genre musik.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540'),
+	('mentor-guitar', 'Mr. Hendrix', 'mentor.guitar@musicsphere.com', '081234567803', 'Gitar', NULL, 'Gitaris profesional dengan keahlian rock, blues, dan akustik.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540'),
+	('mentor-piano', 'Mr. Pianist', 'mentor.piano@musicsphere.com', '081234567801', 'Piano', NULL, 'Pianis profesional dengan pengalaman 10 tahun mengajar piano pop dan klasik.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540'),
+	('mentor-ukulele', 'Ms. Strings', 'mentor.ukulele@musicsphere.com', '081234567805', 'Ukulele', NULL, 'Pemain ukulele berpengalaman dengan pendekatan mengajar yang menyenangkan.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540'),
+	('mentor-vocal', 'Ms. Voran', 'mentor.vocal@musicsphere.com', '081234567802', 'Vokal', NULL, 'Pelatih vokal berpengalaman dengan spesialisasi teknik pernapasan dan kontrol suara.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540');
+
+
+-- Dumping structure for table db_kursus_musik.course
+CREATE TABLE IF NOT EXISTS `course` (
+  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `registrationFee` int NOT NULL DEFAULT '200000',
+  `monthlyFee` int NOT NULL DEFAULT '350000',
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `createdAt` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` datetime(3) NOT NULL,
+  `mentorId` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Course_mentorId_fkey` (`mentorId`),
+  CONSTRAINT `Course_mentorId_fkey` FOREIGN KEY (`mentorId`) REFERENCES `mentor` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table db_kursus_musik.course: ~5 rows (approximately)
+INSERT INTO `course` (`id`, `title`, `description`, `registrationFee`, `monthlyFee`, `image`, `createdAt`, `updatedAt`, `mentorId`) VALUES
+	('course-drum', 'Drum Mastery', 'Kuasai teknik drum dari dasar hingga mahir. Belajar ritme, koordinasi, dan berbagai genre musik.', 200000, 350000, 'https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?q=80&w=2070&auto=format&fit=crop', '2026-02-16 02:19:21.550', '2026-02-16 02:19:21.550', 'mentor-drum'),
+	('course-guitar', 'Guitar Essentials', 'Learn the techniques of guitar legends. From power chords to soulful solos, start your journey with the guitar.', 200000, 350000, '/uploads/courses/1771214143489-kkgk23.jpg', '2026-02-16 02:19:21.550', '2026-02-16 03:55:43.516', 'mentor-guitar'),
+	('course-piano', 'Piano Pop Mastery', 'Master the piano with our comprehensive course covering everything from basic scales to complex compositions. You will learn basic scales and chords, hand independence, reading lead sheets, and improvisation techniques.', 200000, 350000, 'https://images.unsplash.com/photo-1552422535-c45813c61732?q=80&w=2070&auto=format&fit=crop', '2026-02-16 02:19:21.550', '2026-02-16 02:19:21.550', 'mentor-piano'),
+	('course-ukulele', 'Ukulele Fun', 'Belajar ukulele dengan cara yang menyenangkan. Cocok untuk pemula yang ingin bermain musik dengan instrumen yang sederhana.', 200000, 350000, '/uploads/courses/1771214152656-frw7yy.jpg', '2026-02-16 02:19:21.550', '2026-02-16 03:55:52.680', 'mentor-ukulele'),
+	('course-vocal', 'Vocal Training Pro', 'Unlock the full potential of your voice with professional vocal coaching techniques. Improve your range, tone, and confidence with breathing exercises, pitch control, and performance skills.', 200000, 350000, '/uploads/courses/1771214161593-o8bach.jpg', '2026-02-16 02:19:21.550', '2026-02-16 03:56:01.622', 'mentor-vocal');
+
+
 -- Dumping structure for table db_kursus_musik.bill
 CREATE TABLE IF NOT EXISTS `bill` (
   `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -81,29 +132,6 @@ INSERT INTO `chatmessage` (`id`, `userId`, `sender`, `text`, `isRead`, `createdA
 	('msg-3', 'user-student-1', 'user', 'Baik, terima kasih admin!', 0, '2026-02-12 02:20:00.000'),
 	('msg-4', 'user-student-2', 'user', 'Admin, apakah bisa reschedule kelas vocal hari Selasa ke hari Rabu?', 0, '2026-02-13 07:00:00.000');
 
--- Dumping structure for table db_kursus_musik.course
-CREATE TABLE IF NOT EXISTS `course` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `registrationFee` int NOT NULL DEFAULT '200000',
-  `monthlyFee` int NOT NULL DEFAULT '350000',
-  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `createdAt` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `updatedAt` datetime(3) NOT NULL,
-  `mentorId` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `Course_mentorId_fkey` (`mentorId`),
-  CONSTRAINT `Course_mentorId_fkey` FOREIGN KEY (`mentorId`) REFERENCES `mentor` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dumping data for table db_kursus_musik.course: ~5 rows (approximately)
-INSERT INTO `course` (`id`, `title`, `description`, `registrationFee`, `monthlyFee`, `image`, `createdAt`, `updatedAt`, `mentorId`) VALUES
-	('course-drum', 'Drum Mastery', 'Kuasai teknik drum dari dasar hingga mahir. Belajar ritme, koordinasi, dan berbagai genre musik.', 200000, 350000, 'https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?q=80&w=2070&auto=format&fit=crop', '2026-02-16 02:19:21.550', '2026-02-16 02:19:21.550', 'mentor-drum'),
-	('course-guitar', 'Guitar Essentials', 'Learn the techniques of guitar legends. From power chords to soulful solos, start your journey with the guitar.', 200000, 350000, '/uploads/courses/1771214143489-kkgk23.jpg', '2026-02-16 02:19:21.550', '2026-02-16 03:55:43.516', 'mentor-guitar'),
-	('course-piano', 'Piano Pop Mastery', 'Master the piano with our comprehensive course covering everything from basic scales to complex compositions. You will learn basic scales and chords, hand independence, reading lead sheets, and improvisation techniques.', 200000, 350000, 'https://images.unsplash.com/photo-1552422535-c45813c61732?q=80&w=2070&auto=format&fit=crop', '2026-02-16 02:19:21.550', '2026-02-16 02:19:21.550', 'mentor-piano'),
-	('course-ukulele', 'Ukulele Fun', 'Belajar ukulele dengan cara yang menyenangkan. Cocok untuk pemula yang ingin bermain musik dengan instrumen yang sederhana.', 200000, 350000, '/uploads/courses/1771214152656-frw7yy.jpg', '2026-02-16 02:19:21.550', '2026-02-16 03:55:52.680', 'mentor-ukulele'),
-	('course-vocal', 'Vocal Training Pro', 'Unlock the full potential of your voice with professional vocal coaching techniques. Improve your range, tone, and confidence with breathing exercises, pitch control, and performance skills.', 200000, 350000, '/uploads/courses/1771214161593-o8bach.jpg', '2026-02-16 02:19:21.550', '2026-02-16 03:56:01.622', 'mentor-vocal');
 
 -- Dumping structure for table db_kursus_musik.courseschedule
 CREATE TABLE IF NOT EXISTS `courseschedule` (
@@ -156,29 +184,6 @@ INSERT INTO `enrollment` (`id`, `userId`, `courseId`, `status`, `enrolledAt`, `t
 	('enroll-3', 'user-student-2', 'course-vocal', 'active', '2026-02-16 02:19:21.582', 24, 2, 'schedule-2'),
 	('enroll-4', 'user-student-3', 'course-guitar', 'active', '2026-02-16 02:19:21.582', 24, 6, 'schedule-3');
 
--- Dumping structure for table db_kursus_musik.mentor
-CREATE TABLE IF NOT EXISTS `mentor` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `expertise` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `photo` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `bio` text COLLATE utf8mb4_unicode_ci,
-  `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
-  `createdAt` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `updatedAt` datetime(3) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `Mentor_email_key` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dumping data for table db_kursus_musik.mentor: ~5 rows (approximately)
-INSERT INTO `mentor` (`id`, `name`, `email`, `phone`, `expertise`, `photo`, `bio`, `status`, `createdAt`, `updatedAt`) VALUES
-	('mentor-drum', 'Mr. Beat', 'mentor.drum@musicsphere.com', '081234567804', 'Drum', NULL, 'Drummer profesional dengan pengalaman di berbagai genre musik.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540'),
-	('mentor-guitar', 'Mr. Hendrix', 'mentor.guitar@musicsphere.com', '081234567803', 'Gitar', NULL, 'Gitaris profesional dengan keahlian rock, blues, dan akustik.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540'),
-	('mentor-piano', 'Mr. Pianist', 'mentor.piano@musicsphere.com', '081234567801', 'Piano', NULL, 'Pianis profesional dengan pengalaman 10 tahun mengajar piano pop dan klasik.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540'),
-	('mentor-ukulele', 'Ms. Strings', 'mentor.ukulele@musicsphere.com', '081234567805', 'Ukulele', NULL, 'Pemain ukulele berpengalaman dengan pendekatan mengajar yang menyenangkan.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540'),
-	('mentor-vocal', 'Ms. Voran', 'mentor.vocal@musicsphere.com', '081234567802', 'Vokal', NULL, 'Pelatih vokal berpengalaman dengan spesialisasi teknik pernapasan dan kontrol suara.', 'active', '2026-02-16 02:19:21.540', '2026-02-16 02:19:21.540');
 
 -- Dumping structure for table db_kursus_musik.notification
 CREATE TABLE IF NOT EXISTS `notification` (
@@ -268,30 +273,6 @@ INSERT INTO `studentprofile` (`id`, `userId`, `address`, `dateOfBirth`, `instrum
 	('c3fd53d3-4f55-4609-8d27-314f381607c0', 'user-student-3', 'Jl. Diponegoro No. 5, Surabaya', '1999-12-01 00:00:00.000', 'Guitar'),
 	('f23b8fb8-ccff-4671-b591-866ad5b4583d', '9f74e5b5-03f8-4f29-a7c3-d75cfeded8f6', NULL, NULL, NULL);
 
--- Dumping structure for table db_kursus_musik.user
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'student',
-  `avatarUrl` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `createdAt` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `updatedAt` datetime(3) NOT NULL,
-  `verificationCode` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `verificationCodeExpires` datetime(3) DEFAULT NULL,
-  `emailVerified` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `User_email_key` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dumping data for table db_kursus_musik.user: ~4 rows (approximately)
-INSERT INTO `user` (`id`, `name`, `email`, `password`, `role`, `avatarUrl`, `createdAt`, `updatedAt`, `verificationCode`, `verificationCodeExpires`, `emailVerified`) VALUES
-	('9f74e5b5-03f8-4f29-a7c3-d75cfeded8f6', 'Hasanudin', 'setio.adinataarianto@gmail.com', '12345678', 'student', NULL, '2026-02-16 02:33:13.181', '2026-02-16 02:34:38.870', NULL, NULL, '2026-02-16 02:34:38.868'),
-	('user-admin', 'Admin Music Sphere', 'admin@musicsphere.com', 'admin123', 'admin', NULL, '2026-02-16 02:19:21.557', '2026-02-16 02:19:21.557', NULL, NULL, NULL),
-	('user-student-1', 'Budi Santoso', 'budi@gmail.com', 'password123', 'student', NULL, '2026-02-16 02:19:21.562', '2026-02-16 02:19:21.562', NULL, NULL, NULL),
-	('user-student-2', 'Siti Nurhaliza', 'siti@gmail.com', 'password123', 'student', NULL, '2026-02-16 02:19:21.566', '2026-02-16 02:19:21.566', NULL, NULL, NULL),
-	('user-student-3', 'Andi Wijaya', 'andi@gmail.com', 'password123', 'student', NULL, '2026-02-16 02:19:21.569', '2026-02-16 02:19:21.569', NULL, NULL, NULL);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
