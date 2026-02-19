@@ -43,7 +43,6 @@ export async function GET() {
       day: schedule.day,
       startTime: schedule.startTime,
       endTime: schedule.endTime,
-      room: schedule.room,
       status: schedule.status,
       course: {
         id: schedule.course.id,

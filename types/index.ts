@@ -47,6 +47,9 @@ export interface StudentSchedule {
   time: string;
   status: 'active' | 'pending_change' | 'cancelled';
   nextSessionDate: string;
+  requestedDay?: string | null;
+  requestedTime?: string | null;
+  courseId?: string;
 }
 
 export interface ChatMessage {

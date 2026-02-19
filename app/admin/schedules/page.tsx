@@ -10,7 +10,6 @@ interface Schedule {
   day: string;
   startTime: string;
   endTime: string;
-  room: string;
   status: string;
   course: {
     id: string;
@@ -204,9 +203,6 @@ export default function AdminSchedulesPage() {
                   Hari & Waktu
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                  Ruangan
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
@@ -249,11 +245,6 @@ export default function AdminSchedulesPage() {
                       </div>
                     </td>
 
-                    {/* Room */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-900">{schedule.room}</span>
-                    </td>
-
                     {/* Status */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
@@ -293,7 +284,7 @@ export default function AdminSchedulesPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center">
+                  <td colSpan={5} className="px-6 py-12 text-center">
                     <div className="flex flex-col items-center gap-2">
                       <Calendar size={48} className="text-gray-400" />
                       <div className="text-gray-500 font-medium">Belum ada jadwal</div>

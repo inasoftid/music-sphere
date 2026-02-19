@@ -1,15 +1,15 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/context/AuthContext';
 import { usePathname } from 'next/navigation';
 
 export function CourseActivityTracker() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!session?.user) return;
+    if (!user) return;
 
     const updateActivity = async () => {
       try {
@@ -26,7 +26,7 @@ export function CourseActivityTracker() {
     const interval = setInterval(updateActivity, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [session, pathname]);
+  }, [user, pathname]);
 
   return null;
 }

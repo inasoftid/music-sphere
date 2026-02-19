@@ -45,7 +45,6 @@ export async function GET(
       day: schedule.day,
       startTime: schedule.startTime,
       endTime: schedule.endTime,
-      room: schedule.room,
       maxStudents: schedule.maxStudents,
       status: schedule.status,
       course: {
@@ -89,7 +88,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { day, startTime, room, status } = body;
+    const { day, startTime, status } = body;
 
     const existing = await prisma.courseSchedule.findUnique({
       where: { id },
@@ -105,7 +104,6 @@ export async function PUT(
     const newDay = day || existing.day;
     const newStartTime = startTime || existing.startTime;
     const newEndTime = TIME_SLOT_MAP[newStartTime] || existing.endTime;
-    const newRoom = room || existing.room;
     const newStatus = status || existing.status;
 
     // Validasi tumpang tindih mentor jika hari/waktu berubah
@@ -124,25 +122,6 @@ export async function PUT(
       if (mentorConflict) {
         return NextResponse.json(
           { error: 'Mentor sudah memiliki jadwal di waktu tersebut' },
-          { status: 400 }
-        );
-      }
-
-      // Validasi tumpang tindih ruangan
-      const roomConflict = await prisma.courseSchedule.findFirst({
-        where: {
-          id: { not: id },
-          room: newRoom,
-          day: newDay,
-          startTime: newStartTime,
-          status: 'active',
-          enrollments: { some: { status: 'enrolled' } },
-        },
-      });
-
-      if (roomConflict) {
-        return NextResponse.json(
-          { error: `Ruangan ${newRoom} sudah dipakai di waktu tersebut` },
           { status: 400 }
         );
       }
@@ -181,7 +160,6 @@ export async function PUT(
         day: newDay,
         startTime: newStartTime,
         endTime: newEndTime,
-        room: newRoom,
         status: newStatus,
       },
       include: {

@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     const scheduleEnrollments = await prisma.scheduleEnrollment.findMany({
       where: {
         userId,
-        status: 'enrolled',
+        status: { in: ['enrolled', 'pending_change'] },
       },
       include: {
         schedule: {
@@ -56,9 +56,18 @@ export async function GET(request: Request) {
       id: se.id,
       courseName: se.schedule.course.title,
       dayOfWeek: se.schedule.day,
+      startTime: se.schedule.startTime,
+      endTime: se.schedule.endTime,
       time: `${se.schedule.startTime} - ${se.schedule.endTime}`,
-      status: se.schedule.status === 'active' ? 'active' : 'cancelled',
+      status: se.status === 'pending_change'
+        ? 'pending_change'
+        : se.schedule.status === 'active'
+          ? 'active'
+          : 'cancelled',
       nextSessionDate: getNextSessionDate(se.schedule.day),
+      requestedDay: se.requestedDay || null,
+      requestedTime: se.requestedTime || null,
+      courseId: se.schedule.courseId,
     }));
 
     return NextResponse.json(formattedSchedules);
@@ -71,16 +80,20 @@ export async function GET(request: Request) {
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
-    const { scheduleId, status } = body;
+    const { scheduleId, status, requestedDay, requestedTime } = body;
 
     if (!scheduleId) {
       return NextResponse.json({ message: 'Schedule ID required' }, { status: 400 });
     }
 
-    // Update status di ScheduleEnrollment
+    // Simpan permintaan perubahan jadwal (requestedDay, requestedTime) dan status
     const updated = await prisma.scheduleEnrollment.update({
       where: { id: scheduleId },
-      data: { status: status || 'enrolled' },
+      data: {
+        status: status || 'enrolled',
+        requestedDay: requestedDay || null,
+        requestedTime: requestedTime || null,
+      },
     });
 
     return NextResponse.json(updated);

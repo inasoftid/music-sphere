@@ -17,8 +17,6 @@ const TIME_SLOTS = [
   { startTime: '17:00', endTime: '17:45', label: '17:00 - 17:45' },
 ];
 
-const ROOMS = ['Studio 1', 'Studio 2', 'Studio 3'];
-
 interface ScheduleData {
   id: string;
   courseId: string;
@@ -26,7 +24,6 @@ interface ScheduleData {
   day: string;
   startTime: string;
   endTime: string;
-  room: string;
   status: string;
   course: { id: string; title: string };
   mentor: { id: string; name: string; expertise: string };
@@ -42,7 +39,6 @@ export default function EditSchedulePage({ params }: { params: Promise<{ id: str
   const [formData, setFormData] = useState({
     day: '',
     startTime: '',
-    room: '',
     status: 'active',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -58,7 +54,6 @@ export default function EditSchedulePage({ params }: { params: Promise<{ id: str
           setFormData({
             day: data.day,
             startTime: data.startTime,
-            room: data.room,
             status: data.status,
           });
         } else {
@@ -79,7 +74,6 @@ export default function EditSchedulePage({ params }: { params: Promise<{ id: str
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.startTime) newErrors.startTime = 'Pilih waktu';
-    if (!formData.room) newErrors.room = 'Pilih ruangan';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -98,7 +92,6 @@ export default function EditSchedulePage({ params }: { params: Promise<{ id: str
         body: JSON.stringify({
           day: formData.day,
           startTime: formData.startTime,
-          room: formData.room,
           status: formData.status,
         }),
       });
@@ -204,26 +197,6 @@ export default function EditSchedulePage({ params }: { params: Promise<{ id: str
               ))}
             </select>
             {errors.startTime && <p className="mt-1 text-sm text-red-500">{errors.startTime}</p>}
-          </div>
-
-          {/* Room Selection */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Ruangan <span className="text-red-500">*</span>
-            </label>
-            <select
-              value={formData.room}
-              onChange={(e) => setFormData({ ...formData, room: e.target.value })}
-              className={`w-full px-4 py-3 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                errors.room ? 'border-red-500' : 'border-gray-300'
-              }`}
-            >
-              <option value="">Pilih ruangan</option>
-              {ROOMS.map((room) => (
-                <option key={room} value={room}>{room}</option>
-              ))}
-            </select>
-            {errors.room && <p className="mt-1 text-sm text-red-500">{errors.room}</p>}
           </div>
 
           {/* Status */}

@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { lastActiveAt: new Date() },
+      data: { updatedAt: new Date() },
     });
 
     return NextResponse.json({ success: true });

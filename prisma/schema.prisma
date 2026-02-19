@@ -178,8 +178,11 @@ model ScheduleEnrollment {
   id          String   @id @default(uuid())
   scheduleId  String
   userId      String
-  status      String   @default("enrolled") // enrolled, completed, cancelled
+  status      String   @default("enrolled") // enrolled, pending_change, completed, cancelled
   enrolledAt  DateTime @default(now())
+
+  requestedDay  String?  // Hari yang diminta saat reschedule
+  requestedTime String?  // Waktu yang diminta saat reschedule
 
   schedule    CourseSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
