@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.0",
     "lucide-react": "^0.564.0",
     "midtrans-client": "^1.4.3",
     "next": "16.1.6",

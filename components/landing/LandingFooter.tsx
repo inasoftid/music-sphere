@@ -8,11 +8,7 @@ export function LandingFooter() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 17s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
-                </svg>
-              </div>
+              <img src="/faviconmusicsphere.png" alt="Music Sphere" className="w-8 h-8 rounded-lg object-contain" />
               <span className="text-white font-bold text-lg">MusicSphere</span>
             </div>
             <p className="text-sm leading-relaxed">
@@ -47,8 +43,8 @@ export function LandingFooter() {
           <div>
             <h4 className="text-white font-semibold mb-4">Kontak</h4>
             <div className="space-y-2.5 text-sm">
-              <p>Jl. Musik No. 123, Jakarta Selatan</p>
-              <p>info@musicsphere.com</p>
+              <p>Jl. Putri Balau No.115B, Kedamaian Tanjung Karang Timur, Bandar Lampung</p>
+              <p>musicspherestudio@gmail.com</p>
               <p>+62 812-3456-7890</p>
             </div>
             <div className="flex gap-3 mt-4">

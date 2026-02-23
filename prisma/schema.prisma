@@ -24,6 +24,9 @@ model User {
   verificationCodeExpires DateTime?
   emailVerified DateTime?
 
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+
   profile   StudentProfile?
   enrollments Enrollment[]
   bills     Bill[]

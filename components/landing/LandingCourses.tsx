@@ -14,10 +14,13 @@ interface Course {
 
 async function getCourses(): Promise<Course[]> {
   try {
-    return await prisma.course.findMany({
+    const courses = await prisma.course.findMany({
       orderBy: { createdAt: 'desc' },
     });
-  } catch {
+    console.log(`[LandingCourses] Fetched ${courses.length} courses`);
+    return courses;
+  } catch (error) {
+    console.error('[LandingCourses] Error fetching courses:', error);
     return [];
   }
 }

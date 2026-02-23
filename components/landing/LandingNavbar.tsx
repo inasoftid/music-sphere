@@ -36,11 +36,7 @@ export function LandingNavbar() {
         <div className="flex justify-between h-16 lg:h-20 items-center">
           {/* Logo */}
           <Link href="/#home" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-gradient-to-br from-red-600 to-red-800 rounded-xl flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 17s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
-              </svg>
-            </div>
+            <img src="/faviconmusicsphere.png" alt="Music Sphere" className="w-9 h-9 rounded-xl object-contain" />
             <span className={`text-xl font-bold transition-colors ${scrolled || !isHomePage ? 'text-white' : 'text-white'}`}>
               Music<span className="text-red-600">Sphere</span>
             </span>

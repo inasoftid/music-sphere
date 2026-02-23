@@ -6,6 +6,8 @@ import { LandingContact } from '@/components/landing/LandingContact';
 import Link from 'next/link';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col font-sans">

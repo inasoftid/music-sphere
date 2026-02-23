@@ -90,9 +90,9 @@ export default function LoginPage() {
           </div>
 
           <div className="text-sm">
-            <a href="#" className="font-medium text-red-500 hover:text-red-400 transition-colors">
+            <Link href="/auth/forgot-password" className="font-medium text-red-500 hover:text-red-400 transition-colors">
               Lupa kata sandi?
-            </a>
+            </Link>
           </div>
         </div>
 

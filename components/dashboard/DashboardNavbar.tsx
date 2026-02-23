@@ -32,11 +32,7 @@ export const DashboardNavbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shadow-lg shadow-red-900/20">
-                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 14.79s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
-                </svg>
-              </div>
+              <img src="/faviconmusicsphere.png" alt="Music Sphere" className="w-8 h-8 rounded-lg object-contain shadow-lg shadow-red-900/20" />
               <Link href="/dashboard" className="font-bold text-xl text-white tracking-tight hover:opacity-90 transition-opacity">
                 Music<span className="text-red-500">Sphere</span>
               </Link>

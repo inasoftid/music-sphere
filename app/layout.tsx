@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Music Sphere - Kursus Musik Terbaik",
   description: "Tempat kursus musik terbaik dengan guru profesional. Piano, Gitar, Vocal, Biola, dan lainnya.",
+  icons: {
+    icon: "/faviconmusicsphere.png",
+  },
 };
 
 export default function RootLayout({

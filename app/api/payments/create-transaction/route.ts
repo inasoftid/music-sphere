@@ -44,8 +44,8 @@ export async function POST(request: Request) {
       });
     }
 
-    // Generate unique order ID
-    const orderId = `MS-${bill.id.slice(0, 8)}-${Date.now()}`;
+    // Use bill ID directly as order ID for easy reconciliation
+    const orderId = bill.id;
 
     const transactionDetails = {
       transaction_details: {
